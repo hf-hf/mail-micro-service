@@ -58,7 +58,7 @@ PS：推送授权码并非邮箱密码，163/126邮箱获取方式请[点我查�
 ## 使用说明
 发送无附件邮件，POST http://127.0.0.1:12345/api/v0.0.1/mail/send?to=xxxxx@qq.com&title=我是没有附件的主题&content=我是没有附件的内容
 
-多收件人，请使用;分隔收件人邮箱，更多使用详情见[MailLocalhostTest.java](/top/mail/MailLocalhostTest.java)
+多收件人，请使用;分隔收件人邮箱，更多使用详情见[MailLocalhostTest.java](/src/test/java/top/mail/MailLocalhostTest.java)
 
 ## 测试截图
 ![demo](/images/demo.gif)
