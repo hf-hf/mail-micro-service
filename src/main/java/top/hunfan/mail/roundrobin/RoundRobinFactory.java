@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 /**
  * 轮询方式工厂
- * @author hefan
+ * @author hf-hf
  * @date 2018/12/27 11:19
  */
 public class RoundRobinFactory {

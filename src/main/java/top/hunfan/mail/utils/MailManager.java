@@ -10,7 +10,7 @@ import javax.mail.Session;
 
 /**
  * 负载均衡
- * @author hefan
+ * @author hf-hf
  * @date 2018/12/27 14:40
  */
 public class MailManager {

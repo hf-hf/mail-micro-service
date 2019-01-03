@@ -11,7 +11,7 @@ import top.hunfan.mail.service.MailService;
 
 /**
  * 邮件api
- * @author hefan
+ * @author hf-hf
  * @date 2018/12/26 16:17
  */
 @RestController

@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * 加权轮询
- * @author hefan
+ * @author hf-hf
  * @date 2018/12/27 9:51
  */
 public class WeightedRoundRobin extends AbstractRoundRobin {

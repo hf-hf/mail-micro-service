@@ -34,7 +34,7 @@ import top.hunfan.mail.roundrobin.RoundRobinFactory;
 
 /**
  * 邮件发送，支持多邮箱配置、轮询、加权轮询
- * @author hefan
+ * @author hf-hf
  * @date 2018/12/27 10:58
  */
 @Slf4j
@@ -56,7 +56,7 @@ public class MailUtil {
 
     /**
      * 通过单例对象获取
-     * @author hefan
+     * @author hf-hf
      * @date 2018/12/27 14:59
      * @param roundRobinType    轮询类型
      */
@@ -95,7 +95,7 @@ public class MailUtil {
 
     /**
      * 读取内部文件
-     * @author hefan
+     * @author hf-hf
      * @date 2018/12/29 9:25
      */
     private InputStream readClassPath(String fileName){
@@ -104,7 +104,7 @@ public class MailUtil {
 
     /**
      * 读取配置文件
-     * @author hefan
+     * @author hf-hf
      * @date 2018/12/29 9:34
      */
     private void readConfigFiles(String readPath){
@@ -142,7 +142,7 @@ public class MailUtil {
 
     /**
      * 校验mail配置项
-     * @author hefan
+     * @author hf-hf
      * @date 2018/12/28 16:03
      */
     private boolean checkMailConifg(Properties properties){
@@ -295,7 +295,7 @@ public class MailUtil {
 
     /**
      * 追加附件
-     * @author hefan
+     * @author hf-hf
      * @date 2018/12/27 16:53
      * @param attachments
      * @param wrapPart
@@ -319,7 +319,7 @@ public class MailUtil {
 
     /**
      * 追加内嵌图片
-     * @author hefan
+     * @author hf-hf
      * @date 2018/12/27 16:53
      * @param images
      * @param multipart
@@ -339,7 +339,7 @@ public class MailUtil {
 
     /**
      * 追加发件人
-     * @author hefan
+     * @author hf-hf
      * @date 2018/12/27 15:36
      */
     private void addRecipients(MimeMessage message, Message.RecipientType type,

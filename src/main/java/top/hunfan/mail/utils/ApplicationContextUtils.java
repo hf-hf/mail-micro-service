@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * Spring 上下文容器获取类
  * @ClassName ApplicationContextUtils
  * @Description 
- * @author hefan
+ * @author hf-hf
  * @date 2017年7月5日 下午2:26:45
  */
 @Component

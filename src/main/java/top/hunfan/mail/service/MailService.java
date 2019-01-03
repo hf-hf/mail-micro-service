@@ -11,7 +11,7 @@ import top.hunfan.mail.utils.MailUtil;
 
 /**
  * 邮件服务
- * @author hefan
+ * @author hf-hf
  * @date 2018/12/26 16:13
  */
 @Service
@@ -22,7 +22,7 @@ public class MailService {
 
 	/**
 	 * 发送邮件
-	 * @author hefan
+	 * @author hf-hf
 	 * @date 2018/12/26 16:14
 	 * @param to				收件人
 	 * @param title				标题

@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * 抽象轮询
- * @author hefan
+ * @author hf-hf
  * @date 2018/12/27 10:17
  */
 abstract class AbstractRoundRobin implements RoundRobin {
