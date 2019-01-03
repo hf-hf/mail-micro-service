@@ -356,7 +356,7 @@ public class MailUtil {
     private static class MailUtilHolder {
         private static Environment env = ApplicationContextUtils.getBean("environment");
         private static final MailUtil instance =
-                new MailUtil(env.getProperty("customer.mail.roundrobin.type"));
+                new MailUtil(env.getProperty("mail.roundrobin.type"));
     }
 
     /**

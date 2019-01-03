@@ -35,7 +35,8 @@ public class MailLocalhostTest {
 
     private static final String EQUAL_SIGN = "=";
 
-    private static final String TEST_MAIL = "553527481@qq.com";
+    //发送多收件人，使用;分隔收件人邮箱
+    private static final String TEST_MAIL = "xxxxx@qq.com";
 
     private static final String PARAM_SEPARATOR = "&";
 
