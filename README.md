@@ -32,7 +32,7 @@ file.folder=D://maindisk/temp
 # 邮箱host，这里以163为例
 mail.smtp.host=smtp.163.com
 mail.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory
-# 某些云服务器因安全问题，不允许通过stmp 25端口发送邮件，因此使用465端口，采用SSL协议加密传输邮件
+# 某些云服务商因安全问题，不允许通过stmp 25端口发送邮件，因此使用465端口，采用SSL协议加密传输邮件
 mail.smtp.socketFactory.port=465
 # 进行身份验证
 mail.smtp.auth=true
