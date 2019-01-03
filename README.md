@@ -61,4 +61,4 @@ PS：推送授权码并非邮箱密码，163/126邮箱获取方式请[点我查�
 多收件人，请使用;分隔收件人邮箱，更多使用详情见[MailLocalhostTest](/master/top/mail/MailLocalhostTest)
 
 ## 测试截图
-<iframe height=1454 width=844 src="/images/demo.gif">
+![demo](/images/demo.gif)
