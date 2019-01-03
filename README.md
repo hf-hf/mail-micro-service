@@ -27,7 +27,7 @@ mail.roundrobin.type=weighted
 file.folder=D://maindisk/temp
 ```
 
-### mailX.properties
+### mailX.properties（X为从0开始的正整数，多个实例需顺序配置，中间不允许跳过）
 ```
 # 账号
 mail.username=XXXX
