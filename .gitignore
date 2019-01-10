@@ -38,3 +38,4 @@ buildNumber.properties
 
 !/app-log/
 !/target/
+!/h2/

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import top.hunfan.mail.domain.R;
+import top.hunfan.mail.service.MailSendLogService;
 import top.hunfan.mail.service.MailService;
 
 /**
@@ -21,10 +22,25 @@ public class MailApiController {
     @Autowired
     private MailService service;
 
+    @Autowired
+    private MailSendLogService sendLogService;
+
     @RequestMapping(value = "/send", method = RequestMethod.POST)
     public R sendMail(String to, String title, String content, String attachmentName,
-                      MultipartFile attachmentFile) throws Throwable {
-        return R.operate(service.sendMail(to, title, content,
-                attachmentName, attachmentFile));
+                      MultipartFile attachmentFile) {
+        return service.send(to, title, content,
+                attachmentName, attachmentFile);
     }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public R list(int page, int size) {
+        return R.success(sendLogService.findByPage(1,20));
+    }
+
+    @RequestMapping(value = "/clear", method = RequestMethod.POST)
+    public R clear() {
+        sendLogService.clean();
+        return R.success();
+    }
+
 }

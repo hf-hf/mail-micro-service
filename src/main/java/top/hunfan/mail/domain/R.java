@@ -27,11 +27,19 @@ public class R implements Serializable {
     private Object data;
 
     public static R success() {
-        return new R();
+        return success(null);
+    }
+
+    public static R success(Object data) {
+        return new R(Code.SUCCEED.getCode(), Code.SUCCEED.getMessage(), data);
     }
 
     public static R fail() {
         return new R(Code.FAILED.getCode(), Code.FAILED.getMessage());
+    }
+
+    public static R fail(String message) {
+        return new R(Code.FAILED.getCode(), message);
     }
 
     public static R operate(boolean isSucceed) {
