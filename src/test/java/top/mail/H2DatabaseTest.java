@@ -28,7 +28,8 @@ public class H2DatabaseTest {
     @Test
     public void save(){
         MailSendLog mailSendLog = new MailSendLog();
-        mailSendLog.setTo("553527481@qq.com");
+        mailSendLog.setForm("1234@qq.com");
+        mailSendLog.setTo("xxxx@qq.com");
         mailSendLog.setTitle("测试");
         mailSendLog.setContent("12321");
         mailSendLog.setAttachmentName("123.jpg");
@@ -41,7 +42,6 @@ public class H2DatabaseTest {
 
     @Test
     public void findAll(){
-        //List list2 = mailSendLogRepository.findAll();
         Page<MailSendLog> list = mailSendLogRepository.findAll(PageRequest.of(0, 1));
         Assert.notNull(list,"findAll error！");
     }

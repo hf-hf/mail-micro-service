@@ -23,12 +23,12 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
-import javax.xml.bind.PropertyException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 
 import lombok.extern.slf4j.Slf4j;
+import top.hunfan.mail.domain.Constants;
 import top.hunfan.mail.roundrobin.RoundRobin;
 import top.hunfan.mail.roundrobin.RoundRobinFactory;
 
@@ -229,6 +229,7 @@ public class MailUtil {
         Session session = MailManager.getSession(key);
         MimeMessage message = new MimeMessage(session);
         String username = properties.getProperty("mail.username");
+        ThreadLocalUtils.put(Constants.CURRENT_MAIL_FROM, username);
         try {
             message.setFrom(new InternetAddress(username));
             addRecipients(message, Message.RecipientType.TO, to);

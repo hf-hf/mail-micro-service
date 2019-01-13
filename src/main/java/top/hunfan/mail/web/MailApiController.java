@@ -28,17 +28,16 @@ public class MailApiController {
     @RequestMapping(value = "/send", method = RequestMethod.POST)
     public R sendMail(String to, String title, String content, String attachmentName,
                       MultipartFile attachmentFile) {
-        return service.send(to, title, content,
-                attachmentName, attachmentFile);
+        return service.send(to, title, content, attachmentName, attachmentFile);
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public R list(int page, int size) {
-        return R.success(sendLogService.findByPage(1,20));
+        return R.success(sendLogService.findByPage(page, size));
     }
 
-    @RequestMapping(value = "/clear", method = RequestMethod.POST)
-    public R clear() {
+    @RequestMapping(value = "/clean", method = RequestMethod.POST)
+    public R clean() {
         sendLogService.clean();
         return R.success();
     }

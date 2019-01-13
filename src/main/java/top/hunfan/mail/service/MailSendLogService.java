@@ -3,6 +3,7 @@ package top.hunfan.mail.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import top.hunfan.mail.entity.po.MailSendLog;
@@ -20,7 +21,8 @@ public class MailSendLogService {
     private MailSendLogRepository sendLogRepository;
 
     public Page<MailSendLog> findByPage(int page, int size){
-        return sendLogRepository.findAll(PageRequest.of(page - 1, size));
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        return sendLogRepository.findAll(PageRequest.of(page, size, sort));
     }
 
     public void clean(){

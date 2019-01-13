@@ -23,10 +23,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import top.hunfan.mail.domain.Constants;
 import top.hunfan.mail.domain.R;
 import top.hunfan.mail.entity.po.MailSendLog;
 import top.hunfan.mail.service.MailSendLogService;
 import top.hunfan.mail.utils.StringTools;
+import top.hunfan.mail.utils.ThreadLocalUtils;
 
 /**
  * 邮件发送日志切面
@@ -41,6 +43,8 @@ public class MailSendLogAspect {
 
     /**
      * 定义线程池
+     * @author hf-hf
+     * @date 2019/1/10 11:56
      */
     private final ExecutorService SAVE_LOG_EXECUTOR_SERVICE = Executors.newFixedThreadPool(10);
 
@@ -66,8 +70,10 @@ public class MailSendLogAspect {
         Object[] args = joinPoint.getArgs();
         // 参数名
         String[] argNames = ((MethodSignature)joinPoint.getSignature()).getParameterNames();
+        // 异步存储日志
         CompletableFuture.runAsync(new SaveLogThread(sendLogService, args, argNames,
-                request.getRemoteHost(), result.getCode(), result.getMessage()), SAVE_LOG_EXECUTOR_SERVICE);
+                ThreadLocalUtils.get(Constants.CURRENT_MAIL_FROM), request.getRemoteHost(),
+                result.getCode(), result.getMessage()), SAVE_LOG_EXECUTOR_SERVICE);
         log.debug("方法返回值：" + result);
     }
 
@@ -85,6 +91,8 @@ public class MailSendLogAspect {
 
         private String[] argNames;
 
+        private String form;
+
         private String ip;
 
         private Integer code;
@@ -93,6 +101,7 @@ public class MailSendLogAspect {
 
         @Override
         public void run() {
+            ThreadLocalUtils.remove(Constants.CURRENT_MAIL_FROM);
             MailSendLog sendLog = new MailSendLog();
             for(int i=0;i < argNames.length;i++){
                 if("attachmentFile".equals(argNames[i])){
@@ -111,6 +120,7 @@ public class MailSendLogAspect {
                     }
                 }
             }
+            sendLog.setForm(this.form);
             sendLog.setIp(this.ip);
             sendLog.setSentCode(this.code);
             sendLog.setSentMessage(this.message);

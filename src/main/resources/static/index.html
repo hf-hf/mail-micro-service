@@ -2,136 +2,159 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
+    <title>mail-micro-service</title>
 </head>
+<link rel="stylesheet" th:href="@{/css/style.css}"/>
 <body>
-<style>
-    body {
-        margin : 0;
-    }
-
-    .title {
-        border-bottom: 1px solid;
-        padding: 5px 20px;
-        margin-bottom: 24px;
-        font-weight: bold;
-        font-size : 14px;
-    }
-
-    #mail-titles {
-        vertical-align: top;
-        width: 20%;
-        margin : 0;
-        display: inline-block;
-    }
-
-    #mail-titles .active {
-        color: #D68900;
-    }
-
-    #mail-titles > div {
-        border-bottom: 1px solid #ddd;
-        padding: 5px 5px 5px 20px;
-        word-break: break-all;
-    }
-
-    #mail {
-        margin : 0;
-        width : 75%;
-        display: inline-block;
-        border-left: 1px solid #ddd;
-        overflow: hidden;
-    }
-
-    #mail > table td {
-        padding: 10px;
-        word-break: break-all;
-    }
-
-    .label {
-        width : 80px;
-        color: #666;
-    }
-</style>
-<p class="title">邮件发送历史<button style="float:right" onclick='clear_mail()'>清空所有</button></p>
-<div id="mail-titles"></div>
-<div id="mail"></div>
-<script th:src="@{/js/jquery-2.1.4.js}"></script>
+<div id="app">
+    <p class="title">
+        mail-micro-service
+        <button @click="cleanLog()">清空所有</button>
+        <button @click="offsetPage(1)">下一页</button>
+        <button @click="offsetPage(-1)">上一页</button>
+        <select @change="selectPage" v-model="page">
+            <option v-for="page in totalPage" :value="page - 1" :key="page">
+                {{page}}/{{totalPage}}
+            </option>
+        </select>
+    </p>
+    <div id="mail-titles">
+       <div class="mail-record" v-for="(row, index) in mails">
+           <div class="record" @click="render(index)"
+                v-bind:class="index == currentIndex ? mailShowClass : ''">
+               <span class="mail-to">{{row.to}}</span>
+               <span class="mail-title">{{row.title}}</span>
+               <span class="mail-date">{{formatDate(row.createTime, 'yyyy-MM-dd')}}</span>
+               <span class="mail-status" v>{{filterStatus(row.sentCode)}}</span>
+           </div>
+        </div>
+    </div>
+    <div id="mail">
+        <table v-if="currentMail != null">
+            <tr>
+                <td class='label'>发件人</td>
+                <td>{{currentMail.form}}</td>
+            </tr>
+            <tr>
+                <td class='label'>收件人</td>
+                <td>{{currentMail.to}}</td>
+            </tr>
+            <tr>
+                <td class='label'>主题</td>
+                <td>{{currentMail.title}}</td>
+            </tr>
+            <tr>
+                <td class='label'>时间</td>
+                <td>{{formatDate(currentMail.createTime, 'yyyy-MM-dd HH:mm:ss')}}</td>
+            </tr>
+            <tr v-if="currentMail.attachmentName != null">
+                <td class='label'>附件名称</td>
+                <td>{{currentMail.attachmentName}}</td>
+            </tr>
+            <tr>
+                <td class='label'>邮件内容</td>
+                <td>{{currentMail.content}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script th:src="@{/js/vue.min.js}"></script>
+<script th:src="@{/js/axios.min.js}"></script>
 <script>
-    function clear_mail(){
-        $.post("/api/v0.0.1/mail/clear", null, function(data){
-            if(data.data.code == "200"){
-                location.reload();
-            }else {
-                alert("出错了");
-            }
-        });
-    }
-
-    var mails = [];
-
-    function render() {
-        render_mail(0);
-    }
-
-    function format(string, obj) {
-        return string.replace(/\{([0-9A-Za-z_]+)\}/g, function (m, i) {
-            //m：{abc}{name} ; i: abc name
-            return obj[i];
-        });
-    }
-
-    function render_mail(index) {
-        console.log("length=" + mails.length);
-
-        var html = "";
-
-        if (mails.length == 0) {
-            html = "<div>没有邮件</div>";
-        } else {
-            for (var i = 0; i < mails.length; i++) {
-                var mail = mails[i];
-                if (i == index) {
-                    html += formatByNumber("<div class='active' onclick='render_mail({0})'>{1}</div>", i, mail.title);
-                } else {
-                    html += formatByNumber("<div onclick='render_mail({0})'>{1}</div>", i, mail.title);
+    new Vue({
+        el:'#app',
+        data: {
+            totalPage: 0,
+            page: 0,
+            size: 5,
+            mails: [],
+            currentIndex: 0,
+            currentMail: null,
+            mailShowClass: 'active'
+        },
+        mounted: function(){
+            this.fetchData();
+        },
+        methods: {
+            fetchData: function(){
+                axios.get('mail/list?page=' + this.page + "&size=" + this.size)
+                    .then(res => {
+                        this.mails = res.data.data.content;
+                        this.page = res.data.data.number;
+                        this.totalPage = res.data.data.totalPages;
+                        if(this.mails.length > 0){
+                            this.currentMail = this.mails[0];
+                        }
+                    })
+                    .catch(res => {
+                        alert(err);
+                    });
+            },
+            render: function(index){
+                this.currentIndex = index;
+                this.currentMail = this.mails[index];
+            },
+            cleanLog: function () {
+                axios.post('mail/clean')
+                .then(res => {
+                    this.currentMail = null;
+                    this.mails = null;
+                    this.currentIndex = 0;
+                    alert("清空成功！");
+                })
+                .catch(res => {
+                    alert("清空异常！");
+                });
+            },
+            formatDate(time, fmt) {
+                var date = new Date(time);
+                if (/(y+)/.test(fmt)) {
+                    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+                }
+                let o = {
+                    'M+': date.getMonth() + 1,
+                    'd+': date.getDate(),
+                    'H+': date.getHours(),
+                    'm+': date.getMinutes(),
+                    's+': date.getSeconds()
+                };
+                for (let k in o) {
+                    if (new RegExp(`(${k})`).test(fmt)) {
+                        let str = o[k] + '';
+                        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ?
+                            str : ('00' + str).substr(str.length));
+                    }
+                }
+                return fmt;
+            },
+            turnPage: function(page){
+                this.page = page;
+                this.fetchData();
+            },
+            selectPage: function(ele){
+                this.page = ele.target.value;
+                this.fetchData();
+            },
+            offsetPage: function(offset){
+                var page = this.page + offset;
+                var totalPage = this.totalPage;
+                if(page < 0){
+                    page = 0;
+                } else if(page > (totalPage - 1)){
+                    page = (totalPage - 1);
+                }
+                if(page != this.page){
+                    this.turnPage(page);
+                }
+            },
+            filterStatus: function(status){
+                if(200 == status){
+                    return "成功";
+                } else{
+                    return "失败";
                 }
             }
         }
-
-        $("#mail-titles").html(html);
-
-        var html = "";
-        if (mails.length > 0) {
-            var mail = mails[index];
-            html += format("<table>" +
-                "<tr><td class='label'>收件人</td><td>{to}</td></tr>" +
-                "<tr><td class='label'>主题</td><td>{title}</td></tr>" +
-                "<tr><td class='label'>邮件内容</td><td>{content}</td></tr>" +
-                "<tr><td class='label'>发送时间</td><td th:text='${#dates.format(createTime,'yyyy-MM-dd HH:mm:ss')}'></td></tr>" +
-                "</table>", mail);
-        }
-
-        $("#mail").html(html);
-    }
-
-    function formatByNumber(src) {
-        if (arguments.length == 0) return "";
-        var args = Array.prototype.slice.call(arguments, 1);
-        return src.replace(/\{(\d+)\}/g, function (m, i) {
-            var val = args[i];
-            if (val === undefined || val == null) {
-                val = "";
-            }
-            return val;
-        });
-    }
-
-    $(function(){
-        $.getJSON("/api/v0.0.1/mail/list?page=0&size=10", null, function (data) {
-            mails = data.data.content;
-            console.log(mails);
-            render();
-        });
     });
 </script>
 </body>

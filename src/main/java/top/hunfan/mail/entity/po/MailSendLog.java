@@ -24,7 +24,10 @@ public class MailSendLog {
     @GeneratedValue
     private int id;
 
-    @Column(name = "to", length = 20)
+    @Column(name = "form", length = 100)
+    private String form;
+
+    @Column(name = "to", length = 100)
     private String to;
 
     @Column(name = "title", length = 20)

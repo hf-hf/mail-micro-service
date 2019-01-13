@@ -1,0 +1,108 @@
+body {
+    margin : 0;
+}
+
+.title {
+    border-bottom: 1px solid;
+    padding: 5px 20px;
+    margin-bottom: 24px;
+    font-weight: bold;
+    font-size : 14px;
+}
+
+.title > button {
+    float:right;
+    margin-left: 5px;
+}
+
+#mail-titles {
+    vertical-align: top;
+    display: inline-block;
+}
+
+#mail-titles .active {
+    color: #D68900;
+}
+
+#mail-titles > div {
+    #border-bottom: 1px solid #ddd;
+    padding: 5px 5px 5px 20px;
+    word-break: break-all;
+}
+
+#mail {
+    margin : 0;
+    width : 75%;
+    display: inline-block;
+    border-left: 1px solid #ddd;
+    overflow: hidden;
+}
+
+#mail > table td {
+    padding: 10px;
+    word-break: break-all;
+}
+
+.label {
+    width : 80px;
+    color: #666;
+}
+
+.mail-record {
+    border-top: 1px solid #808080;
+}
+
+.record {
+    height: 50px;
+    width: 280px;
+    font-size: 12px;
+    color: #808080;
+    #border: 1px solid #808080;
+    position: relative;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.mail-title {
+    position: absolute;
+    left: 0;
+    bottom: 7px;
+    width: 200px;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.mail-to {
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 200px;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/*.mail-to:hover {*/
+/*height: auto;*/
+/*word-break:break-all;*/
+/*white-space: pre-wrap;*/
+/*text-decoration: none;*/
+/*}*/
+
+.mail-date {
+    position: absolute;
+    right: 0;
+    top: 7px;
+}
+
+.mail-status {
+    position: absolute;
+    right: 0;
+    bottom: 7px;
+}
+
+.title > select {
+    float:right;
+    height: 23px;
+}
