@@ -95,7 +95,7 @@ POST http://127.0.0.1:12345/api/v0.0.1/mail/send?to=xxxxx@qq.com&title=我是没
 git clone https://github.com/hf-hf/mail-micro-service.git
 cd mail-micro-service
 ./docker/docker-build.sh
-./docker-run.sh
+./docker/docker-run.sh
 ```
 
 快捷安装，拷贝Dockerfile-full，重名为Dockerfile。
