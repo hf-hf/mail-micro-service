@@ -312,7 +312,7 @@ public class MailUtil {
                 String fileName = dataHandler.getName();
                 attachmentBodyPart.setDataHandler(dataHandler);
                 // 显示指定文件名（防止文件名乱码）
-                attachmentBodyPart.setFileName(MimeUtility.encodeText(fileName));
+                attachmentBodyPart.setFileName(fileName);
                 wrapPart.addBodyPart(attachmentBodyPart);
             }
         }
