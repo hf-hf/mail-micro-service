@@ -29,6 +29,8 @@ import org.springframework.core.env.Environment;
 
 import lombok.extern.slf4j.Slf4j;
 import top.hunfan.mail.domain.Constants;
+import top.hunfan.mail.exception.RoundRobinErrorException;
+import top.hunfan.mail.exception.InitFailedException;
 import top.hunfan.mail.roundrobin.RoundRobin;
 import top.hunfan.mail.roundrobin.RoundRobinFactory;
 
@@ -283,13 +285,13 @@ public class MailUtil {
                         String subject, String content,
                         File[] images, File[] attachments) {
         if(!initComplete){
-            throw new ExceptionInInitializerError("mail init error！");
+            throw new InitFailedException("mail init error！");
         }
         // 负载均衡实现
         String key = roundRobin.select().id();
         if(StringUtils.isEmpty(key)){
             //TODO invoker降级，移除
-            throw new RuntimeException("轮询异常！");
+            throw new RoundRobinErrorException("round robin error！");
         }
         return sendByLoadBalance(key, to, cc, bcc, subject, content, images, attachments);
     }
