@@ -26,13 +26,14 @@ public class MailService {
 	 * @author hf-hf
 	 * @date 2018/12/26 16:14
 	 * @param to				收件人
+     * @param from				指定发件人（可选）
 	 * @param title				标题
 	 * @param content			内容
 	 * @param attachmentFile	附件
 	 * @throws Throwable
 	 */
-	public boolean sendMail(String to, String title, String content, String attachmentName,
-                      MultipartFile attachmentFile) throws Throwable {
+	public boolean sendMail(String to, String from, String title, String content,
+                            String attachmentName, MultipartFile attachmentFile) throws Throwable {
 		File tempFile = null;
 		if (attachmentFile != null) {
 			File tempFolder = new File(fileFolder);
@@ -44,26 +45,27 @@ public class MailService {
 			tempFile.createNewFile();
 			attachmentFile.transferTo(tempFile);
 		}
-        return MailUtil.getInstance().send(to, title, content, tempFile);
+        return MailUtil.getInstance().send(to, from, title, content, tempFile);
 	}
 
-    /**
-     * 发送邮件
-     * @author hf-hf
+	/**
+	 * 发送邮件
+	 * @author hf-hf
      * @date 2018/12/26 16:14
-     * @param to				收件人
-     * @param title				标题
-     * @param content			内容
-     * @param attachmentFile	附件
-     */
-	public R send(String to, String title, String content, String attachmentName,
-                  MultipartFile attachmentFile){
-        try {
-            return R.operate(sendMail(to, title, content,
-                    attachmentName, attachmentFile));
-        } catch (Throwable e){
-            return R.fail(e.getMessage());
-        }
-    }
+	 * @param to				收件人
+     * @param from				指定发件人（可选）
+	 * @param title				标题
+	 * @param content			内容
+	 * @param attachmentFile	附件
+	 */
+	public R send(String to, String from, String title, String content,
+                  String attachmentName, MultipartFile attachmentFile){
+		try {
+			return R.operate(sendMail(to, from, title, content,
+					attachmentName, attachmentFile));
+		} catch (Throwable e){
+			return R.fail(e.getMessage());
+		}
+	}
 
 }

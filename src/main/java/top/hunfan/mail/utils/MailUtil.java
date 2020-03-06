@@ -29,8 +29,9 @@ import org.springframework.core.env.Environment;
 
 import lombok.extern.slf4j.Slf4j;
 import top.hunfan.mail.domain.Constants;
-import top.hunfan.mail.exception.RoundRobinErrorException;
 import top.hunfan.mail.exception.InitFailedException;
+import top.hunfan.mail.exception.InvalidFromException;
+import top.hunfan.mail.exception.RoundRobinErrorException;
 import top.hunfan.mail.roundrobin.RoundRobin;
 import top.hunfan.mail.roundrobin.RoundRobinFactory;
 
@@ -181,6 +182,17 @@ public class MailUtil {
     }
 
     /**
+     * 检查环境状态（是否初始化完毕）
+     * @author hefan
+     * @date 2020/3/6 17:00
+     */
+    public void checkSendEnv(){
+        if(!initComplete){
+            throw new InitFailedException("mail init error！");
+        }
+    }
+
+    /**
      * 发送邮件
      * @param to            收件人，多个收件人用 {@code ;} 分隔
      * @param subject       主题
@@ -195,17 +207,34 @@ public class MailUtil {
     /**
      * 发送邮件
      * @param to            收件人，多个收件人用 {@code ;} 分隔
+     * @param from			指定发件人（可选）
+     * @param subject       主题
+     * @param content       内容
+     * @return              如果邮件发送成功，则返回 {@code true}，否则返回 {@code false}
+     */
+    public boolean send(String to, String from, String subject, String content) {
+        return send(to, from, null, null, subject,
+                content, null, null);
+    }
+
+    /**
+     * 发送邮件
+     * @param to            收件人，多个收件人用 {@code ;} 分隔
      * @param subject       主题
      * @param content       内容
      * @param attachment    附件
      * @return              如果邮件发送成功，则返回 {@code true}，否则返回 {@code false}
      */
-    public boolean send(String to, String subject, String content, File attachment) {
+    public boolean send(String to, String from, String subject, String content, File attachment) {
         File[] attachments = null;
         if(null != attachment){
             attachments = new File[]{attachment};
         }
-        return send(to, null, null, subject,
+        if(StringUtils.isBlank(from)){
+            return send(to, null, null, subject,
+                    content, null, attachments);
+        }
+        return send(to, from, null, null, subject,
                 content, null, attachments);
     }
 
@@ -284,14 +313,37 @@ public class MailUtil {
     public boolean send(String to, String cc, String bcc,
                         String subject, String content,
                         File[] images, File[] attachments) {
-        if(!initComplete){
-            throw new InitFailedException("mail init error！");
-        }
+        checkSendEnv();
         // 负载均衡实现
         String key = roundRobin.select().id();
         if(StringUtils.isEmpty(key)){
             //TODO invoker降级，移除
             throw new RoundRobinErrorException("round robin error！");
+        }
+        return sendByLoadBalance(key, to, cc, bcc, subject, content, images, attachments);
+    }
+
+    /**
+     * 发送邮件
+     *
+     * @param to            收件人，多个收件人用 {@code ;} 分隔
+     * @param from          指定发件人
+     * @param cc            抄送人，多个抄送人用 {@code ;} 分隔
+     * @param bcc           密送人，多个密送人用 {@code ;} 分隔
+     * @param subject       主题
+     * @param content       内容，可引用内嵌图片，引用方式：{@code <img src="cid:内嵌图片文件名" />}
+     * @param images        内嵌图片
+     * @param attachments   附件
+     * @return              如果邮件发送成功，则返回 {@code true}，否则返回 {@code false}
+     */
+    public boolean send(String to, String from, String cc, String bcc,
+                        String subject, String content,
+                        File[] images, File[] attachments) {
+        checkSendEnv();
+        // 根据指定的发件人邮箱获取key
+        String key = MailManager.getKeyByUserName(from);
+        if(StringUtils.isEmpty(key)){
+            throw new InvalidFromException("round robin error！");
         }
         return sendByLoadBalance(key, to, cc, bcc, subject, content, images, attachments);
     }

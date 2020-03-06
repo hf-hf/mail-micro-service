@@ -3,6 +3,7 @@ package top.hunfan.mail.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,8 +28,9 @@ public class MailApiController {
 
     @RequestMapping(value = "/send", method = RequestMethod.POST)
     public R sendMail(String to, String title, String content, String attachmentName,
+                      @RequestParam("from") String from,
                       MultipartFile attachmentFile) {
-        return service.send(to, title, content, attachmentName, attachmentFile);
+        return service.send(to, from, title, content, attachmentName, attachmentFile);
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)

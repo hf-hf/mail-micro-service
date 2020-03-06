@@ -55,4 +55,15 @@ public class MailManager {
         return propertiesMap.get(key);
     }
 
+    public static String getKeyByUserName(String username){
+        Properties prop;
+        for (String key : propertiesMap.keySet()) {
+            prop = propertiesMap.get(key);
+            if(username.equals(prop.getProperty("mail.username"))){
+                return key;
+            }
+        }
+        return null;
+    }
+
 }
