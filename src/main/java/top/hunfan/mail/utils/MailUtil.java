@@ -76,6 +76,8 @@ public class MailUtil {
         }
         if(null != roundRobin){
             initComplete = true;
+            // 解决附件名过长，被截取后乱码问题
+            System.setProperty("mail.mime.splitlongparameters", "false");
         }
         log.info("load mail properties finish,success count={}", MailManager.propertiesMap.size());
     }
