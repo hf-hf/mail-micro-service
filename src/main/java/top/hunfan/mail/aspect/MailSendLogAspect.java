@@ -104,7 +104,8 @@ public class MailSendLogAspect {
             ThreadLocalUtils.remove(Constants.CURRENT_MAIL_FROM);
             MailSendLog sendLog = new MailSendLog();
             for(int i=0;i < argNames.length;i++){
-                if("attachmentFile".equals(argNames[i])){
+                if("attachmentFile".equals(argNames[i])
+                        || "from".equals(argNames[i])){
                     continue;
                 }
                 Field field = ReflectionUtils.findField(sendLog.getClass(), argNames[i]);

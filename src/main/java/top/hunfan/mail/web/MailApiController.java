@@ -28,7 +28,7 @@ public class MailApiController {
 
     @RequestMapping(value = "/send", method = RequestMethod.POST)
     public R sendMail(String to, String title, String content, String attachmentName,
-                      @RequestParam("from") String from,
+                      @RequestParam(value = "from", required = false) String from,
                       MultipartFile attachmentFile) {
         return service.send(to, from, title, content, attachmentName, attachmentFile);
     }
