@@ -345,7 +345,7 @@ public class MailUtil {
         // 根据指定的发件人邮箱获取key
         String key = MailManager.getKeyByUserName(from);
         if(StringUtils.isEmpty(key)){
-            throw new InvalidFromException("round robin error！");
+            throw new InvalidFromException("invalid from！");
         }
         return sendByLoadBalance(key, to, cc, bcc, subject, content, images, attachments);
     }
