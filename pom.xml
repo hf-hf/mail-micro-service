@@ -24,7 +24,7 @@
         <commons-io.version>2.5</commons-io.version>
         <javax.mail.version>1.6.2</javax.mail.version>
         <druid.version>1.1.12</druid.version>
-        <h2database.version>1.4.196</h2database.version>
+        <h2database.version>2.0.206</h2database.version>
     </properties>
 
     <dependencies>
