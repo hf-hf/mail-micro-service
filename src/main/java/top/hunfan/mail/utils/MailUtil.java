@@ -93,8 +93,9 @@ public class MailUtil {
         try {
             in = new BufferedInputStream(new FileInputStream(path));
         } catch (FileNotFoundException e) {
-            // ignore
-            in = readSystemPath("config" + File.separator + fileName);
+            if(!fileName.startsWith("config")){
+                in = readSystemPath("config" + File.separator + fileName);
+            }
         }
         return in;
     }
