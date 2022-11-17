@@ -14,6 +14,9 @@ RUN cd /tmp && mvn install -Dmaven.test.skip=true \
 
 RUN rm -rf /tmp && rm -rf ~/.m2
 
+RUN mkdir -p /app/tmpdir
+
 ENTRYPOINT exec java -Dfile.encoding=UTF8 \
                      -Duser.timezone=GMT+08 \
+                     -Djava.io.tmpdir=/app/tmpdir \
                      -jar /app/app.jar
